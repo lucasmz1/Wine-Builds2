@@ -143,7 +143,7 @@ build_with_bwrap () {
 		  --tmpfs /mnt --tmpfs /media --bind "${BUILD_DIR}" "${BUILD_DIR}" \
 		  --bind-try "${XDG_CACHE_HOME}"/ccache "${XDG_CACHE_HOME}"/ccache \
 		  --bind-try "${HOME}"/.ccache "${HOME}"/.ccache \
-		  --setenv PATH "/opt/Red-Rose-MinGW-w64-Posix-Urct-v12.0.0.r0.g819a6ec2e-Gcc-11.4.1/bin:/usr/local/bin:/bin:/sbin:/usr/bin:/usr/sbin" \
+		  --setenv PATH "/opt/Red-Rose-MinGW-w64-Posix-Urct-v12.0.0.r458.g03d8a40f5-Gcc-11.5.0/bin:/usr/local/bin:/bin:/sbin:/usr/bin:/usr/sbin" \
 			"$@"
 }
 
@@ -174,10 +174,10 @@ fi
 
 # Stable and Development versions have a different source code location
 # Determine if the chosen version is stable or development
-if [ "$(echo "$WINE_VERSION" | cut -c3)" = "0" ]; then
-	WINE_URL_VERSION=$(echo "$WINE_VERSION" | cut -c1).0
+if [ "$(echo "$WINE_VERSION" | cut -d "." -f2 | cut -c1)" = "0" ]; then
+	WINE_URL_VERSION=$(echo "$WINE_VERSION" | cut -d "." -f 1).0
 else
-	WINE_URL_VERSION=$(echo "$WINE_VERSION" | cut -c1).x
+	WINE_URL_VERSION=$(echo "$WINE_VERSION" | cut --d "." -f 1).x
 fi
 
 rm -rf "${BUILD_DIR}"
@@ -207,10 +207,14 @@ if [ -n "${CUSTOM_SRC_PATH}" ]; then
 	WINE_VERSION="$(cat wine/VERSION | tail -c +14)"
 	BUILD_NAME="${WINE_VERSION}"-custom
 elif [ "$WINE_BRANCH" = "staging-tkg" ] || [ "$WINE_BRANCH" = "staging-tkg-ntsync" ]; then
-	if [ "$WINE_BRANCH" = "staging-tkg" ]; then
-		git clone https://github.com/Kron4ek/wine-tkg wine
+	if [ "${EXPERIMENTAL_WOW64}" = "true" ]; then
+		git clone https://github.com/Kron4ek/wine-tkg wine -b wow64
 	else
-		git clone https://github.com/Kron4ek/wine-tkg wine -b ntsync
+		if [ "$WINE_BRANCH" = "staging-tkg" ]; then
+			git clone https://github.com/Kron4ek/wine-tkg wine
+		else
+			git clone https://github.com/Kron4ek/wine-tkg wine -b ntsync
+		fi
 	fi
 
 	WINE_VERSION="$(cat wine/VERSION | tail -c +14)"
