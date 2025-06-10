@@ -1,11 +1,13 @@
 name: Wine Stable
 
 on:
+  schedule:
+    - cron:  '0 0 1 * *'
   workflow_dispatch:
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     steps:
       - uses: actions/checkout@v4
