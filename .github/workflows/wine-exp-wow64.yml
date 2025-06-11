@@ -15,11 +15,7 @@ jobs:
         run: |
           sudo apt update
           sudo apt install debootstrap perl git wget xz-utils bubblewrap autoconf
-          #sudo tar -C /opt -xpf /opt/Bootstraps/bootstraps.tar.xz
-          chmod +x create_ubuntu_bootstraps.sh
-          sudo ./create_ubuntu_bootstraps.sh
-          cd /opt
-          sudo tar -I "xz -T0 -9" -cpf bootstraps.tar.xz chroots
+          sudo tar -C /opt -xpf /opt/Bootstraps/bootstraps.tar.xz
           chmod +x build_wine.sh
           export WINE_VERSION="latest"
           export EXPERIMENTAL_WOW64="true"
