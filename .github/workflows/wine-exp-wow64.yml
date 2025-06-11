@@ -35,3 +35,12 @@ jobs:
         with:
           name: Wine-WoW64-NTSYNC
           path: ./*.tar.xz
+      - name: Build release
+        uses: marvinpinto/action-automatic-releases@6273874b61ebc8c71f1a61b2d98e234cf389b303
+        with:
+          title: Wine-Builds2 SYSWOW64
+          automatic_release_tag: continuous
+          prerelease: false
+          draft: false
+          files: ./*.tar.xz
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
